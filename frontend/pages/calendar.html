@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Calendar - Burnout Prediction System-Bond Beyond</title>
+  <link rel="stylesheet" href="../css/calender.css">
+  <!-- <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .calendar-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .calendar-header {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .calendar-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .calendar-nav h2 {
+      font-size: 2rem;
+      color: #2d3748;
+      min-width: 280px;
+      text-align: center;
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .view-toggles {
+      display: flex;
+      gap: 0.5rem;
+      background: #f7fafc;
+      padding: 0.25rem;
+      border-radius: 8px;
+    }
+
+    .view-toggle {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: 500;
+      color: #4a5568;
+      transition: all 0.2s;
+    }
+
+    .view-toggle.active {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .calendar-main {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    .calendar-grid-container {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: #e2e8f0;
+      margin-bottom: 1px;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+    }
+
+    .weekday {
+      background: #4a5568;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: #e2e8f0;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+    }
+
+    .calendar-day {
+      background: white;
+      min-height: 120px;
+      padding: 0.75rem;
+      position: relative;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .calendar-day:hover {
+      background: #f7fafc;
+    }
+
+    .calendar-day.other-month {
+      background: #f7fafc;
+      opacity: 0.5;
+    }
+
+    .calendar-day.today {
+      background: #ebf4ff;
+      border: 2px solid #667eea;
+    }
+
+    .day-number {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .calendar-day.other-month .day-number {
+      color: #a0aec0;
+    }
+
+    .event {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.5rem;
+      margin: 0.25rem 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      border-left: 3px solid;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .event:hover {
+      transform: translateX(2px);
+    }
+
+    .event.exam {
+      background: #fff5f5;
+      color: #c53030;
+      border-color: #fc8181;
+    }
+
+    .event.holiday {
+      background: #f0fff4;
+      color: #22543d;
+      border-color: #48bb78;
+    }
+
+    .event.event {
+      background: #ebf8ff;
+      color: #2c5282;
+      border-color: #4299e1;
+    }
+
+    .event.registration {
+      background: #fef5e7;
+      color: #7d5d00;
+      border-color: #f6c343;
+    }
+
+    .event.deadline {
+      background: #fff0f0;
+      color: #9b2c2c;
+      border-color: #f56565;
+    }
+
+    .event.other {
+      background: #faf5ff;
+      color: #553c9a;
+      border-color: #9f7aea;
+    }
+
+    .event-count {
+      font-size: 0.7rem;
+      color: #718096;
+      margin-top: 0.25rem;
+      font-weight: 500;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      color: #2d3748;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .upcoming-events {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .upcoming-event {
+      padding: 1rem;
+      border-left: 4px solid;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+
+    .upcoming-event:hover {
+      transform: translateX(4px);
+    }
+
+    .upcoming-event.exam {
+      border-color: #fc8181;
+      background: #fff5f5;
+    }
+
+    .upcoming-event.holiday {
+      border-color: #48bb78;
+      background: #f0fff4;
+    }
+
+    .upcoming-event.event {
+      border-color: #4299e1;
+      background: #ebf8ff;
+    }
+
+    .upcoming-event.registration {
+      border-color: #f6c343;
+      background: #fef5e7;
+    }
+
+    .upcoming-event.deadline {
+      border-color: #f56565;
+      background: #fff0f0;
+    }
+
+    .upcoming-event.other {
+      border-color: #9f7aea;
+      background: #faf5ff;
+    }
+
+    .event-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.25rem;
+    }
+
+    .event-date {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+
+    .event-type-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border-left: 3px solid;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .list-view {
+      display: none;
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .list-view.active {
+      display: block;
+    }
+
+    .list-event {
+      padding: 1.5rem;
+      border-left: 4px solid;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .list-event:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #718096;
+    }
+
+    @media (max-width: 1024px) {
+      .calendar-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .calendar-day {
+        min-height: 80px;
+        padding: 0.5rem;
+      }
+
+      .day-number {
+        font-size: 0.9rem;
+      }
+
+      .event {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.4rem;
+      }
+    }
+  </style> -->
+  
+</head>
+
+<body>
+  <nav>
+    <h1>🎓 Burnout Prediction System-Bond Beyond</h1>
+    <div class="nav-links">
+      <a href="student.html">Dashboard</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="grades.html">Grades</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <div class="calendar-nav">
+        <button class="nav-btn" onclick="previousMonth()">← Prev</button>
+        <h2 id="month-year"></h2>
+        <button class="nav-btn" onclick="nextMonth()">Next →</button>
+      </div>
+      <div class="view-toggles">
+        <button class="view-toggle active" onclick="toggleView('grid')">📅 Grid View</button>
+        <button class="view-toggle" onclick="toggleView('list')">📋 List View</button>
+      </div>
+    </div>
+
+    <div class="calendar-main">
+      <div id="grid-view">
+        <div class="calendar-grid-container">
+          <div class="weekdays">
+            <div class="weekday">Sunday</div>
+            <div class="weekday">Monday</div>
+            <div class="weekday">Tuesday</div>
+            <div class="weekday">Wednesday</div>
+            <div class="weekday">Thursday</div>
+            <div class="weekday">Friday</div>
+            <div class="weekday">Saturday</div>
+          </div>
+          <div class="calendar-grid" id="calendar-days"></div>
+        </div>
+      </div>
+
+      <div id="list-view" class="list-view">
+        <h3>All Events</h3>
+        <div id="list-events"></div>
+      </div>
+
+      <div class="sidebar">
+        <div class="card">
+          <h3>📌 Upcoming Events</h3>
+          <div class="upcoming-events" id="upcoming-events"></div>
+        </div>
+
+        <div class="card">
+          <h3>🎨 Event Types</h3>
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-color exam" style="background: #fff5f5; border-color: #fc8181;"></div>
+              <span>Exams</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color holiday" style="background: #f0fff4; border-color: #48bb78;"></div>
+              <span>Holidays</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color event" style="background: #ebf8ff; border-color: #4299e1;"></div>
+              <span>Events</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color registration" style="background: #fef5e7; border-color: #f6c343;"></div>
+              <span>Registration</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color deadline" style="background: #fff0f0; border-color: #f56565;"></div>
+              <span>Deadlines</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color other" style="background: #faf5ff; border-color: #9f7aea;"></div>
+              <span>Other</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>➕ Add Personal Event</h3>
+          <form id="event-form" onsubmit="addEvent(event)">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="event-title" required>
+            </div>
+            <div class="form-group">
+              <label>Type</label>
+              <select id="event-type" required>
+                <option value="exam">Exam</option>
+                <option value="holiday">Holiday</option>
+                <option value="event">Event</option>
+                <option value="registration">Registration</option>
+                <option value="deadline">Deadline</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="event-date" required>
+            </div>
+            <div class="form-group">
+              <label>Priority</label>
+              <select id="event-priority">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary">Add Event</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Detail Modal -->
+  <div id="event-modal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    if (!isLoggedIn() || getUser().role !== 'student') {
+      window.location.href = 'login.html';
+    }
+
+    let currentDate = new Date();
+    let events = [];
+    let currentView = 'grid';
+
+    async function loadCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      document.getElementById('month-year').textContent =
+        currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      const startDate = new Date(year, month, 1);
+      const endDate = new Date(year, month + 1, 0);
+
+      try {
+        events = await calendarAPI.get(
+          startDate.toISOString(),
+          endDate.toISOString()
+        );
+        renderCalendar();
+        renderUpcomingEvents();
+        if (currentView === 'list') {
+          renderListView();
+        }
+      } catch (error) {
+        console.error('Load events error:', error);
+      }
+    }
+
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+
+      let html = '';
+      let dayCount = 1;
+      const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+
+      for (let i = 0; i < totalCells; i++) {
+        if (i < firstDay || dayCount > daysInMonth) {
+          html += '<div class="calendar-day other-month"></div>';
+        } else {
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCount).padStart(2, '0')}`;
+          const isToday = today.getDate() === dayCount &&
+            today.getMonth() === month &&
+            today.getFullYear() === year;
+
+          const dayEvents = events.filter(e => {
+            const eventDate = new Date(e.startDate).toISOString().split('T')[0];
+            console.log('Checking:', eventDate, 'vs', dateStr, e.title); // DEBUG
+            return eventDate === dateStr;
+          });
+
+          html += `<div class="calendar-day ${isToday ? 'today' : ''}" onclick="showDayEvents('${dateStr}')">
+            <div class="day-number">${dayCount}</div>`;
+
+          const displayEvents = dayEvents.slice(0, 3);
+          displayEvents.forEach(event => {
+            html += `<div class="event ${event.type || event.eventType}" onclick="event.stopPropagation(); showEventDetail('${event._id}')">${event.title}</div>`;
+          });
+
+          if (dayEvents.length > 3) {
+            html += `<div class="event-count">+${dayEvents.length - 3} more</div>`;
+          }
+
+          html += '</div>';
+          dayCount++;
+        }
+      }
+
+      document.getElementById('calendar-days').innerHTML = html;
+    }
+
+    function renderUpcomingEvents() {
+      const today = new Date();
+      const upcoming = events
+        .filter(e => new Date(e.startDate) >= today)
+        .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+        .slice(0, 5);
+
+      let html = '';
+      if (upcoming.length === 0) {
+        html = '<p style="color: #718096; text-align: center;">No upcoming events</p>';
+      } else {
+        upcoming.forEach(event => {
+          const date = new Date(event.startDate);
+          html += `
+            <div class="upcoming-event ${event.type}" onclick="showEventDetail('${event._id}')">
+              <div class="event-title">${event.title}</div>
+              <div class="event-date">📅 ${date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          })}</div>
+              <span class="event-type-badge" style="background: rgba(102, 126, 234, 0.1); color: #667eea;">${event.type}</span>
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById('upcoming-events').innerHTML = html;
+    }
+
+    function renderListView() {
+      const sortedEvents = [...events].sort((a, b) =>
+        new Date(a.startDate) - new Date(b.startDate)
+      );
+
+      let html = '';
+      sortedEvents.forEach(event => {
+        const date = new Date(event.startDate);
+        html += `
+          <div class="list-event ${event.type}" onclick="showEventDetail('${event._id}')">
+            <h4 style="margin-bottom: 0.5rem;">${event.title}</h4>
+            <p style="color: #718096; font-size: 0.9rem;">
+              📅 ${date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        })}
+            </p>
+            ${event.description ? `<p style="margin-top: 0.5rem; color: #4a5568;">${event.description}</p>` : ''}
+            ${event.venue ? `<p style="margin-top: 0.25rem; color: #718096;">📍 ${event.venue}</p>` : ''}
+            <span class="event-type-badge" style="background: rgba(102, 126, 234, 0.1); color: #667eea;">${event.type}</span>
+          </div>
+        `;
+      });
+
+      document.getElementById('list-events').innerHTML = html || '<p style="text-align: center; color: #718096;">No events found</p>';
+    }
+
+    function toggleView(view) {
+      currentView = view;
+      document.querySelectorAll('.view-toggle').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (view === 'grid') {
+        document.getElementById('grid-view').style.display = 'block';
+        document.getElementById('list-view').classList.remove('active');
+      } else {
+        document.getElementById('grid-view').style.display = 'none';
+        document.getElementById('list-view').classList.add('active');
+        renderListView();
+      }
+    }
+
+    function showEventDetail(eventId) {
+      const event = events.find(e => e._id === eventId);
+      if (!event) return;
+
+      const date = new Date(event.startDate);
+      document.getElementById('modal-title').textContent = event.title;
+
+      let body = `
+        <p><strong>📅 Date:</strong> ${date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })}</p>
+        <p><strong>🏷️ Type:</strong> <span class="event-type-badge" style="background: rgba(102, 126, 234, 0.1); color: #667eea;">${event.type}</span></p>
+        <p><strong>⚠️ Priority:</strong> ${event.priority}</p>
+      `;
+
+      if (event.description) {
+        body += `<p><strong>📝 Description:</strong> ${event.description}</p>`;
+      }
+
+      if (event.venue) {
+        body += `<p><strong>📍 Venue:</strong> ${event.venue}</p>`;
+      }
+
+      if (event.isPersonal) {
+        body += `<p style="margin-top: 1rem;"><em style="color: #718096;">Personal event</em></p>`;
+      }
+
+      document.getElementById('modal-body').innerHTML = body;
+      document.getElementById('event-modal').classList.add('active');
+    }
+
+    function showDayEvents(dateStr) {
+      const dayEvents = events.filter(e => {
+        const eventDate = new Date(e.startDate).toISOString().split('T')[0];
+        return eventDate === dateStr;
+      });
+
+      if (dayEvents.length === 0) return;
+
+      const date = new Date(dateStr);
+      document.getElementById('modal-title').textContent = date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      let body = '';
+      dayEvents.forEach(event => {
+        body += `
+          <div class="upcoming-event ${event.type}" onclick="showEventDetail('${event._id}')" style="margin-bottom: 1rem;">
+            <div class="event-title">${event.title}</div>
+            <span class="event-type-badge" style="background: rgba(102, 126, 234, 0.1); color: #667eea;">${event.type}</span>
+            ${event.description ? `<p style="margin-top: 0.5rem; font-size: 0.9rem;">${event.description}</p>` : ''}
+          </div>
+        `;
+      });
+
+      document.getElementById('modal-body').innerHTML = body;
+      document.getElementById('event-modal').classList.add('active');
+    }
+
+    function closeModal(e) {
+      if (!e || e.target.id === 'event-modal') {
+        document.getElementById('event-modal').classList.remove('active');
+      }
+    }
+
+    function previousMonth() {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      loadCalendar();
+    }
+
+    function nextMonth() {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      loadCalendar();
+    }
+
+    async function addEvent(e) {
+      e.preventDefault();
+
+      const event = {
+        title: document.getElementById('event-title').value,
+        type: document.getElementById('event-type').value,
+        startDate: document.getElementById('event-date').value,
+        endDate: document.getElementById('event-date').value,
+        priority: document.getElementById('event-priority').value
+      };
+
+      try {
+        // Use the /personal endpoint
+        const response = await fetch('http://localhost:5000/api/calendar/personal', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getToken()}`
+          },
+          body: JSON.stringify(event)
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to create event');
+        }
+
+        document.getElementById('event-form').reset();
+        await loadCalendar();
+        alert('✅ Event added successfully!');
+      } catch (error) {
+        alert('❌ Error: ' + error.message);
+      }
+    }
+
+    function logout() {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
+
+    // Load calendar on page load
+    loadCalendar();
+  </script>
+</body>
+
+</html>

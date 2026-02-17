@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Tasks</title>
+  <link rel="stylesheet" href="../css/task.css">
+</head>
+<body>
+  <nav>
+    <h1>Burnout Prediction System</h1>
+    <div class="nav-links">
+      <a href="student.html">Dashboard</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="grades.html">Grades</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h2>Add New Task</h2>
+      <form id="task-form" onsubmit="addTask(event)">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="title" required>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="type" required>
+            <option value="assignment">Assignment</option>
+            <option value="exam">Exam</option>
+            <option value="project">Project</option>
+            <option value="quiz">Quiz</option>
+            <option value="placement">Placement Prep</option>
+            <option value="hackathon">Hackathon</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" id="subject" required>
+        </div>
+        <div class="form-group">
+          <label>Deadline</label>
+          <input type="date" id="deadline" required>
+        </div>
+        <div class="form-group">
+          <label>Estimated Effort (hours)</label>
+          <input type="number" id="effort" min="0.5" step="0.5" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Task</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>My Tasks</h2>
+      <div id="tasks-container">
+        <div class="loading">Loading tasks...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    if (!isLoggedIn() || getUser().role !== 'student') {
+      window.location.href = 'login.html';
+    }
+
+    async function loadTasks() {
+      try {
+        const tasks = await taskAPI.getAll();
+        const container = document.getElementById('tasks-container');
+        
+        if (tasks.length === 0) {
+          container.innerHTML = '<p>No tasks found</p>';
+          return;
+        }
+
+        // Group by completed status
+        const pending = tasks.filter(t => !t.completed);
+        const completed = tasks.filter(t => t.completed);
+
+        let html = '<h3>Pending Tasks</h3>';
+        html += '<table><tr><th>Title</th><th>Type</th><th>Subject</th><th>Deadline</th><th>Effort</th><th>Actions</th></tr>';
+        
+        pending.forEach(task => {
+          const deadline = new Date(task.deadline).toLocaleDateString();
+          html += `
+            <tr>
+              <td>${task.title}</td>
+              <td>${task.type}</td>
+              <td>${task.subject}</td>
+              <td>${deadline}</td>
+              <td>${task.estimatedEffort}h</td>
+              <td>
+                <button class="btn btn-success" onclick="markComplete('${task._id}')">Complete</button>
+                <button class="btn btn-danger" onclick="deleteTask('${task._id}')">Delete</button>
+              </td>
+            </tr>
+          `;
+        });
+        html += '</table>';
+
+        if (completed.length > 0) {
+          html += '<h3 style="margin-top: 2rem;">Completed Tasks</h3>';
+          html += '<table><tr><th>Title</th><th>Type</th><th>Subject</th><th>Deadline</th></tr>';
+          completed.forEach(task => {
+            const deadline = new Date(task.deadline).toLocaleDateString();
+            html += `
+              <tr style="opacity: 0.6;">
+                <td>${task.title}</td>
+                <td>${task.type}</td>
+                <td>${task.subject}</td>
+                <td>${deadline}</td>
+              </tr>
+            `;
+          });
+          html += '</table>';
+        }
+
+        container.innerHTML = html;
+      } catch (error) {
+        console.error('Load tasks error:', error);
+      }
+    }
+
+    async function addTask(e) {
+      e.preventDefault();
+
+      const task = {
+        title: document.getElementById('title').value,
+        type: document.getElementById('type').value,
+        subject: document.getElementById('subject').value,
+        deadline: document.getElementById('deadline').value,
+        estimatedEffort: parseFloat(document.getElementById('effort').value)
+      };
+
+      try {
+        await taskAPI.create(task);
+        document.getElementById('task-form').reset();
+        await loadTasks();
+        alert('Task added successfully!');
+      } catch (error) {
+        alert('Error adding task: ' + error.message);
+      }
+    }
+
+    async function markComplete(id) {
+      try {
+        await taskAPI.update(id, { completed: true });
+        await loadTasks();
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+
+    async function deleteTask(id) {
+      if (!confirm('Delete this task?')) return;
+
+      try {
+        await taskAPI.delete(id);
+        await loadTasks();
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+
+    function logout() {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
+
+    loadTasks();
+  </script>
+</body>
+</html>

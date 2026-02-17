@@ -1,0 +1,347 @@
+/* ============================================
+   🌤️ ACADEMIC CALENDAR – PREMIUM CREAM THEME
+   ============================================ */
+
+/* ---------- RESET ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ---------- ROOT COLORS ---------- */
+:root {
+  --cream-bg: #f7efe3;
+  --cream-card: #fbf4e8;
+  --cream-dark: #3b2f23;
+  --brown: #8b5e34;
+  --brown-soft: rgba(139, 94, 52, 0.18);
+  --shadow-soft: 0 12px 30px rgba(0,0,0,0.12);
+  --shadow-hover: 0 18px 40px rgba(0,0,0,0.18);
+}
+
+/* ---------- BODY ---------- */
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: linear-gradient(135deg, #f2e7d8, #efe3cf);
+  min-height: 100vh;
+  color: var(--cream-dark);
+}
+
+/* ---------- NAVBAR ---------- */
+nav {
+  background: #fff7eb;
+  padding: 1.3rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav h1 {
+  font-weight: 900;
+  font-size: 1.6rem;
+}
+
+.nav-links a {
+  margin-left: 1.2rem;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--cream-dark);
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+.nav-links a:hover {
+  background: var(--brown-soft);
+}
+
+/* ---------- CONTAINER ---------- */
+.calendar-container {
+  max-width: 1450px;
+  margin: 2.5rem auto;
+  padding: 0 1.2rem;
+}
+
+/* ---------- HEADER ---------- */
+.calendar-header {
+  background: var(--cream-card);
+  border-radius: 18px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.calendar-nav h2 {
+  font-size: 1.9rem;
+  font-weight: 900;
+  min-width: 280px;
+  text-align: center;
+}
+
+.nav-btn {
+  background: linear-gradient(135deg, var(--brown), #a0703c);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139,94,52,0.4);
+}
+
+/* ---------- VIEW TOGGLE ---------- */
+.view-toggles {
+  background: #efe3d3;
+  padding: 0.3rem;
+  border-radius: 999px;
+}
+
+.view-toggle {
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.view-toggle.active {
+  background: #fffdf8;
+  box-shadow: var(--shadow-soft);
+}
+
+/* ---------- MAIN GRID ---------- */
+.calendar-main {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 2.2rem;
+}
+
+/* ---------- CALENDAR GRID ---------- */
+.calendar-grid-container {
+  background: var(--cream-card);
+  padding: 2rem;
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Weekdays */
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.weekday {
+  background: var(--brown);
+  color: white;
+  font-weight: 800;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+/* Days */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: #e7dccb;
+}
+
+.calendar-day {
+  background: #fffdf8;
+  min-height: 115px;
+  padding: 0.6rem;
+  cursor: pointer;
+  transition: background 0.25s ease;
+  border-radius: 6px;
+}
+
+.calendar-day:hover {
+  background: #f3e8d8;
+}
+
+.calendar-day.today {
+  outline: 3px solid var(--brown);
+}
+
+/* Day number */
+.day-number {
+  font-weight: 900;
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+/* ---------- EVENTS (CALENDAR CELL) ---------- */
+.event {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.45rem;
+  margin-bottom: 0.3rem;
+  border-radius: 6px;
+  border-left: 4px solid;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.25s ease;
+}
+
+.event:hover {
+  transform: translateX(3px);
+}
+
+/* Event types */
+.event.exam { background:#fdecea; border-color:#c53030; }
+.event.holiday { background:#e6f4ea; border-color:#2f855a; }
+.event.event { background:#ebf8ff; border-color:#3182ce; }
+.event.registration { background:#fef5e7; border-color:#b7791f; }
+.event.deadline { background:#fff0f0; border-color:#9b2c2c; }
+.event.other { background:#faf5ff; border-color:#6b46c1; }
+
+/* PERSONAL EVENT */
+.event.personal {
+  background: #f3e8d8;
+  border-color: var(--brown);
+  font-weight: 700;
+}
+
+/* ---------- EVENT COUNT ---------- */
+.event-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #6b5a48;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar .card {
+  background: var(--cream-card);
+  border-radius: 18px;
+  padding: 1.6rem;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 1.8rem;
+}
+
+.card h3 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+/* Upcoming */
+.upcoming-event {
+  padding: 1rem;
+  border-left: 5px solid;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.upcoming-event:hover {
+  transform: translateX(4px);
+}
+
+/* ---------- LIST VIEW ---------- */
+#list-view h3 {
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 1.2rem;
+}
+
+.list-event {
+  background: var(--cream-card);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border-left: 6px solid;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 1.3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.list-event:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+.list-event.personal {
+  background: #f1e3cf;
+  border-color: var(--brown);
+}
+
+/* ---------- FORM ---------- */
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  background: #fffaf2;
+  border: 2px solid var(--brown-soft);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--brown);
+  box-shadow: 0 0 0 3px rgba(139,94,52,0.15);
+}
+
+/* Submit */
+.btn-primary {
+  margin-top: 1rem;
+  background: linear-gradient(135deg, var(--brown), #a0703c);
+  border-radius: 999px;
+  padding: 0.7rem 1.6rem;
+  font-weight: 900;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 28px rgba(139,94,52,0.5);
+  transform: translateY(-2px);
+}
+
+/* ---------- MODAL ---------- */
+.modal {
+  background: rgba(0,0,0,0.45);
+}
+
+.modal-content {
+  background: var(--cream-card);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1100px) {
+  .calendar-main {
+    grid-template-columns: 1fr;
+  }
+}

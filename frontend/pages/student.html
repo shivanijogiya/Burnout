@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="../css/student.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- <style>
+    .rec-card {
+      border-left: 4px solid #3498db;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    .rec-card.priority-critical {
+      border-left-color: #e74c3c;
+      background: #fee;
+    }
+
+    .rec-card.priority-high {
+      border-left-color: #f39c12;
+      background: #ffeaa7;
+    }
+
+    .rec-card.priority-medium {
+      border-left-color: #3498db;
+      background: #dfe6e9;
+    }
+
+    .rec-card.priority-low {
+      border-left-color: #27ae60;
+      background: #d5f4e6;
+    }
+
+    .rec-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .rec-description {
+      color: #555;
+      margin-bottom: 0.8rem;
+    }
+
+    .rec-actions {
+      margin-top: 0.5rem;
+    }
+
+    .rec-actions li {
+      margin: 0.3rem 0;
+      color: #333;
+    }
+
+    .rec-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+
+    .rec-badge.critical {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .rec-badge.high {
+      background: #f39c12;
+      color: white;
+    }
+
+    .rec-badge.medium {
+      background: #3498db;
+      color: white;
+    }
+
+    .rec-badge.low {
+      background: #27ae60;
+      color: white;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .refresh-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .refresh-btn {
+      background: #3498db;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s;
+    }
+
+    .refresh-btn:hover {
+      background: #2980b9;
+    }
+
+    .refresh-btn:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+    }
+
+    .last-updated {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #7f8c8d;
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state-message {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state-hint {
+      font-size: 0.9rem;
+      color: #95a5a6;
+    }
+
+    /* Calendar Events Styles */
+    .event-item {
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      border-left: 4px solid #3498db;
+      background: #f8f9fa;
+      border-radius: 4px;
+      transition: transform 0.2s;
+    }
+
+    .event-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .event-item.event-type-exam {
+      border-left-color: #e74c3c;
+      background: #fee;
+    }
+
+    .event-item.event-type-registration {
+      border-left-color: #f39c12;
+      background: #ffeaa7;
+    }
+
+    .event-item.event-type-holiday {
+      border-left-color: #27ae60;
+      background: #d5f4e6;
+    }
+
+    .event-item.event-type-event {
+      border-left-color: #3498db;
+      background: #dfe6e9;
+    }
+
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .event-title {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #2c3e50;
+    }
+
+    .event-type-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .event-type-badge.exam {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .event-type-badge.registration {
+      background: #f39c12;
+      color: white;
+    }
+
+    .event-type-badge.holiday {
+      background: #27ae60;
+      color: white;
+    }
+
+    .event-type-badge.event {
+      background: #3498db;
+      color: white;
+    }
+
+    .event-date {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+
+    .event-description {
+      color: #34495e;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .event-icon {
+      margin-right: 0.5rem;
+    }
+
+    .two-column-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 968px) {
+      .two-column-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #workloadChart {
+      max-height: 400px;
+      width: 100% !important;
+    }
+
+    .chart-empty-message {
+      text-align: center;
+      padding: 2rem;
+      color: #7f8c8d;
+    }
+
+    .chart-empty-message p:first-child {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .chart-empty-message p:last-child {
+      font-size: 0.9rem;
+      color: #95a5a6;
+    }
+  </style> -->
+</head>
+
+<body>
+  <nav>
+    <h1>Burnout Prediction System-Bond Beyond</h1>
+    <div class="nav-links">
+      <a href="student.html">Dashboard</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="grades.html">Grades</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <h1 id="welcome"></h1>
+      <div class="refresh-controls">
+        <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">
+          <span id="refresh-icon">🔄</span>
+          <span>Refresh</span>
+        </button>
+        <button class="refresh-btn" onclick="forceRecalculate()" style="background: #e74c3c;">
+          <span>⚡</span>
+          <span>Force Recalculate</span>
+        </button>
+        <div class="last-updated" id="last-updated"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Burnout Risk Card -->
+  <div class="card">
+    <h2>Current Burnout Risk</h2>
+    <div id="risk-display">
+      <div class="loading">Loading analysis...</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🤖 ML-Based Recommendations</h2>
+    <div id="ml-recommendations">
+      <div class="loading">Loading recommendations...</div>
+    </div>
+  </div>
+
+  <!-- Groq AI Recommendations -->
+  <div class="card">
+    <h2>✨ AI-Powered Recommendations (Groq)</h2>
+    <div id="groq-recommendations">
+      <div class="loading">Loading AI recommendations...</div>
+    </div>
+  </div>
+
+  <!-- Workload Chart -->
+  <!-- Workload Charts -->
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h2>Workload Analytics (Last 30 Days)</h2>
+      <select id="chart-type-selector" onchange="changeChartType()"
+        style="padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd;">
+        <option value="bar">Bar Chart</option>
+        <option value="line">Line Chart</option>
+        <option value="area">Area Chart</option>
+        <option value="pie">Weekly Distribution</option>
+      </select>
+    </div>
+    <canvas id="workloadChart"></canvas>
+    <div id="workload-stats"
+      style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem;">
+      <div style="text-align: center; padding: 1rem; background: #e3f2fd; border-radius: 8px;">
+        <div style="font-size: 2rem; font-weight: bold; color: #1976d2;" id="stat-avg">-</div>
+        <div style="color: #666; font-size: 0.9rem;">Avg Daily Load</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: #fff3e0; border-radius: 8px;">
+        <div style="font-size: 2rem; font-weight: bold; color: #f57c00;" id="stat-peak">-</div>
+        <div style="color: #666; font-size: 0.9rem;">Peak Day</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: #f3e5f5; border-radius: 8px;">
+        <div style="font-size: 2rem; font-weight: bold; color: #7b1fa2;" id="stat-total">-</div>
+        <div style="color: #666; font-size: 0.9rem;">Total Hours</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: #e8f5e9; border-radius: 8px;">
+        <div style="font-size: 2rem; font-weight: bold; color: #388e3c;" id="stat-trend">-</div>
+        <div style="color: #666; font-size: 0.9rem;">Trend</div>
+      </div>
+    </div>
+    <div id="workload-empty" style="display: none;">
+      <div class="empty-state">
+        <div class="empty-state-icon">📊</div>
+        <div class="empty-state-message">No workload data yet</div>
+        <div class="empty-state-hint">Add tasks and calendar events to see your workload trends</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div id="alerts-container"></div>
+
+  <!-- Two Column Layout for Tasks and Events -->
+  <div class="two-column-layout">
+    <!-- Upcoming Tasks -->
+    <div class="card">
+      <h2>📝 Upcoming Tasks (Next 7 Days)</h2>
+      <div id="tasks-list">
+        <div class="loading">Loading tasks...</div>
+      </div>
+    </div>
+
+    <!-- Upcoming Calendar Events -->
+    <div class="card">
+      <h2>📅 Upcoming Events (Next 30 Days)</h2>
+      <div id="calendar-events-list">
+        <div class="loading">Loading events...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Grades -->
+  <div class="card">
+    <h2>📊 Recent Grades</h2>
+    <div id="grades-list">
+      <div class="loading">Loading grades...</div>
+    </div>
+  </div>
+  </div>
+ <iframe 
+  src="chatbot.html"
+  style="
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 360px;
+    height: 520px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: none;  /* ✅ REMOVED SHADOW */
+    z-index: 50;
+    background: transparent;
+  ">
+</iframe>
+
+  <script src="../js/api.js"></script>
+  <script>
+    // Check authentication
+    if (!isLoggedIn() || getUser().role !== 'student') {
+      window.location.href = 'login.html';
+    }
+
+    const user = getUser();
+    document.getElementById('welcome').textContent = `Welcome, ${user.name}`;
+
+    let workloadChart = null;
+    let isRefreshing = false;
+    let lastLoadTime = null;
+
+    // ============================================
+    // AUTO-REFRESH ON PAGE VISIBILITY
+    // ============================================
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) {
+        console.log('Page visible - refreshing dashboard');
+        loadDashboard();
+      }
+    });
+
+    window.addEventListener('focus', function () {
+      console.log('Window focused - refreshing dashboard');
+      loadDashboard();
+    });
+
+    // ============================================
+    // LOAD DASHBOARD
+    // ============================================
+    async function loadDashboard() {
+      if (isRefreshing) {
+        console.log('Already refreshing, skipping...');
+        return;
+      }
+
+      try {
+        isRefreshing = true;
+        setRefreshingState(true);
+
+        await Promise.all([
+          loadBurnoutAnalysis(),
+          loadWorkloadChart(),
+          loadUpcomingTasks(),
+          loadUpcomingEvents(),
+          loadRecentGrades(),
+          loadRecommendations()  // ADD THIS
+        ]);
+
+        lastLoadTime = new Date();
+        updateLastRefreshTime();
+      } catch (error) {
+        console.error('Dashboard load error:', error);
+      } finally {
+        isRefreshing = false;
+        setRefreshingState(false);
+      }
+    }
+
+    // ============================================
+    // MANUAL REFRESH
+    // ============================================
+    async function manualRefresh() {
+      console.log('Manual refresh triggered');
+      await loadDashboard();
+    }
+
+    async function forceRecalculate() {
+      try {
+        const btn = event.target.closest('button');
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳</span><span>Calculating...</span>';
+
+        const response = await fetch('http://localhost:5000/api/workload/recalculate', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${getToken()}`
+          }
+        });
+
+        if (!response.ok) throw new Error('Recalculation failed');
+
+        alert('✅ Burnout recalculated! Refreshing dashboard...');
+        await loadDashboard();
+
+        btn.disabled = false;
+        btn.innerHTML = '<span>⚡</span><span>Force Recalculate</span>';
+      } catch (error) {
+        alert('❌ Error: ' + error.message);
+        console.error(error);
+      }
+    }
+
+    // ============================================
+    // SET REFRESHING STATE
+    // ============================================
+    function setRefreshingState(refreshing) {
+      const btn = document.getElementById('refresh-btn');
+      const icon = document.getElementById('refresh-icon');
+
+      if (refreshing) {
+        btn.disabled = true;
+        icon.style.display = 'inline-block';
+        icon.style.animation = 'spin 1s linear infinite';
+      } else {
+        btn.disabled = false;
+        icon.style.animation = 'none';
+      }
+    }
+
+    // ============================================
+    // UPDATE LAST REFRESH TIME
+    // ============================================
+    function updateLastRefreshTime() {
+      const elem = document.getElementById('last-updated');
+      if (lastLoadTime) {
+        elem.textContent = `Last updated: ${lastLoadTime.toLocaleTimeString()}`;
+      }
+    }
+
+    // ============================================
+    // LOAD BURNOUT ANALYSIS
+    // ============================================
+    async function loadBurnoutAnalysis() {
+      try {
+        console.log('Loading burnout analysis...');
+        const analysis = await burnoutAPI.getAnalysis();
+        console.log('Burnout analysis:', analysis);
+
+        const display = document.getElementById('risk-display');
+
+        const riskClass = `risk-${analysis.risk}`;
+        const riskText = analysis.risk.toUpperCase();
+
+        let html = `
+      <div style="text-align: center; padding: 2rem;">
+        <div class="risk-badge ${riskClass}" style="font-size: 1.5rem; padding: 1rem 2rem;">
+          ${riskText} RISK
+        </div>
+        <p style="margin-top: 1rem; font-size: 1.1rem;">Score: ${analysis.score}/100</p>
+      </div>
+    `;
+
+        // ✅ NEW: Show grade performance summary
+        if (analysis.signals?.gradeAnalysis) {
+          const ga = analysis.signals.gradeAnalysis;
+          if (ga.avgPercentage > 0) {
+            const gradeColor = ga.avgPercentage >= 70 ? '#27ae60' : ga.avgPercentage >= 50 ? '#f39c12' : '#e74c3c';
+            html += `
+          <div style="background: #f8f9fa; padding: 1rem; margin: 1rem 0; border-radius: 8px; border-left: 4px solid ${gradeColor};">
+            <h3 style="margin: 0 0 0.5rem 0;">📊 Academic Performance</h3>
+            <p style="margin: 0.3rem 0; font-size: 1.05rem;">
+              <strong>Average Grade:</strong> <span style="color: ${gradeColor}; font-weight: bold;">${ga.avgPercentage}%</span>
+            </p>
+            ${ga.strugglingSubjects.length > 0 ? `
+              <p style="margin: 0.3rem 0; color: #e74c3c;">
+                <strong>⚠️ ${ga.strugglingSubjects.length} subject(s) need attention</strong>
+              </p>
+              <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                ${ga.strugglingSubjects.map(s => `
+                  <li style="color: #e74c3c;">${s.subject}: ${s.percentage}%</li>
+                `).join('')}
+              </ul>
+            ` : `
+              <p style="margin: 0.3rem 0; color: #27ae60;">✅ All subjects performing well</p>
+            `}
+          </div>
+        `;
+          }
+        }
+
+        if (analysis.reasons && analysis.reasons.length > 0) {
+          html += '<div style="margin-top: 1rem;">';
+          html += '<h3>Contributing Factors:</h3><ul>';
+          analysis.reasons.forEach(reason => {
+            html += `<li style="margin: 0.5rem 0;">${reason}</li>`;
+          });
+          html += '</ul></div>';
+        }
+
+        display.innerHTML = html;
+
+        // Clear previous alerts
+        document.getElementById('alerts-container').innerHTML = '';
+
+        // Show new alerts
+        if (analysis.risk === 'high' || analysis.risk === 'medium') {
+          showAlerts(analysis);
+        }
+      } catch (error) {
+        console.error('Burnout analysis error:', error);
+        document.getElementById('risk-display').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">⚠️</div>
+        <div class="empty-state-message">Unable to calculate burnout risk</div>
+        <div class="empty-state-hint">Add tasks, events, and grades to generate your burnout analysis</div>
+      </div>
+    `;
+      }
+    }
+    // ============================================
+    // LOAD WORKLOAD CHART
+    // ============================================
+    let workloadData = null; // Store data globally
+    let currentChartType = 'bar';
+
+    // ============================================
+    // LOAD WORKLOAD CHART
+    // ============================================
+    async function loadWorkloadChart() {
+      try {
+        console.log('Loading workload chart...');
+        const data = await workloadAPI.get(30);
+        console.log('Workload data:', data);
+
+        if (!data || data.length === 0) {
+          console.log('No workload data');
+          document.getElementById('workloadChart').style.display = 'none';
+          document.getElementById('workload-stats').style.display = 'none';
+          document.getElementById('workload-empty').style.display = 'block';
+          return;
+        }
+
+        workloadData = data; // Store globally
+        document.getElementById('workloadChart').style.display = 'block';
+        document.getElementById('workload-stats').style.display = 'grid';
+        document.getElementById('workload-empty').style.display = 'none';
+
+        // Update stats
+        updateWorkloadStats(data);
+
+        // Render chart
+        renderChart(currentChartType);
+      } catch (error) {
+        console.error('Workload chart error:', error);
+        document.getElementById('workloadChart').style.display = 'none';
+        document.getElementById('workload-stats').style.display = 'none';
+        document.getElementById('workload-empty').style.display = 'block';
+      }
+    }
+
+    // ============================================
+    // UPDATE WORKLOAD STATS
+    // ============================================
+    function updateWorkloadStats(data) {
+      const scores = data.map(d => d.dailyScore || 0);
+      const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+      const peak = Math.max(...scores).toFixed(1);
+      const total = scores.reduce((a, b) => a + b, 0).toFixed(0);
+
+      // Calculate trend (last week vs previous week)
+      const lastWeek = scores.slice(-7).reduce((a, b) => a + b, 0) / 7;
+      const prevWeek = scores.slice(-14, -7).reduce((a, b) => a + b, 0) / 7;
+      const trendPercent = prevWeek > 0 ? (((lastWeek - prevWeek) / prevWeek) * 100).toFixed(0) : 0;
+      const trendSymbol = trendPercent > 0 ? '📈' : trendPercent < 0 ? '📉' : '➡️';
+
+      document.getElementById('stat-avg').textContent = avg;
+      document.getElementById('stat-peak').textContent = peak;
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-trend').textContent = `${trendSymbol} ${Math.abs(trendPercent)}%`;
+    }
+
+    // ============================================
+    // RENDER CHART
+    // ============================================
+    function renderChart(type) {
+      if (!workloadData) return;
+
+      const dates = workloadData.map(d => new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const scores = workloadData.map(d => d.dailyScore || 0);
+
+      const ctx = document.getElementById('workloadChart').getContext('2d');
+
+      // Clear any previous empty messages
+      const parent = document.getElementById('workloadChart').parentElement;
+      const oldMsg = parent.querySelector('.chart-empty-message');
+      if (oldMsg) oldMsg.remove();
+
+      // Destroy existing chart
+      if (workloadChart) {
+        workloadChart.destroy();
+      }
+
+      if (type === 'pie') {
+        // Weekly distribution pie chart
+        const weeks = [];
+        for (let i = 0; i < workloadData.length; i += 7) {
+          const weekData = workloadData.slice(i, i + 7);
+          const weekTotal = weekData.reduce((sum, d) => sum + (d.dailyScore || 0), 0);
+          if (weekTotal > 0) { // Only add weeks with data
+            const weekNum = Math.floor(i / 7) + 1;
+            weeks.push({ label: `Week ${weekNum}`, total: weekTotal });
+          }
+        }
+
+        if (weeks.length === 0) {
+          // Show message instead of empty pie
+          document.getElementById('workloadChart').style.display = 'none';
+          const msg = document.createElement('div');
+          msg.className = 'chart-empty-message';
+          msg.innerHTML = '<p>📊 Not enough data for weekly distribution</p><p>Add more tasks over multiple weeks to see the breakdown</p>';
+          parent.appendChild(msg);
+          return;
+        }
+
+        document.getElementById('workloadChart').style.display = 'block';
+
+        workloadChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: weeks.map(w => w.label),
+            datasets: [{
+              data: weeks.map(w => w.total),
+              backgroundColor: [
+                'rgba(52, 152, 219, 0.8)',
+                'rgba(46, 204, 113, 0.8)',
+                'rgba(241, 196, 15, 0.8)',
+                'rgba(231, 76, 60, 0.8)',
+                'rgba(155, 89, 182, 0.8)'
+              ],
+              borderWidth: 2,
+              borderColor: '#fff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  font: { size: 12 },
+                  padding: 15
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 13, weight: 'bold' },
+                bodyFont: { size: 12 },
+                callbacks: {
+                  label: (context) => `${context.label}: ${context.parsed.toFixed(1)} hours`
+                }
+              }
+            }
+          }
+        });
+      } else {
+        // Bar, Line, or Area chart
+
+        document.getElementById('workloadChart').style.display = 'block';
+
+        // Calculate better Y-axis max
+        const maxScore = Math.max(...scores);
+        const yMax = maxScore > 0 ? Math.ceil(maxScore * 1.2) : 10;
+
+        const chartConfig = {
+          type: type === 'area' ? 'line' : type,
+          data: {
+            labels: dates,
+            datasets: [{
+              label: 'Daily Workload Score',
+              data: scores,
+              backgroundColor: type === 'area' ? 'rgba(52, 152, 219, 0.3)' : 'rgba(52, 152, 219, 0.6)',
+              borderColor: 'rgba(52, 152, 219, 1)',
+              borderWidth: 2,
+              fill: type === 'area',
+              tension: type === 'line' || type === 'area' ? 0.4 : 0,
+              pointRadius: type === 'line' || type === 'area' ? 4 : 0,
+              pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointHoverRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2.5,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: yMax,
+                title: {
+                  display: true,
+                  text: 'Workload Score (hours)',
+                  font: { size: 13, weight: 'bold' }
+                },
+                grid: { color: 'rgba(0, 0, 0, 0.08)' },
+                ticks: {
+                  stepSize: yMax <= 10 ? 2 : 5,
+                  font: { size: 12 }
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Date',
+                  font: { size: 13, weight: 'bold' }
+                },
+                grid: { display: false },
+                ticks: {
+                  maxRotation: 45,
+                  minRotation: 45,
+                  font: { size: 11 }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: true,
+                labels: { font: { size: 13 } }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 13, weight: 'bold' },
+                bodyFont: { size: 12 },
+                callbacks: {
+                  label: (context) => `Workload: ${context.parsed.y.toFixed(1)} hours`
+                }
+              }
+            }
+          }
+        };
+
+        workloadChart = new Chart(ctx, chartConfig);
+      }
+    }
+
+    // ============================================
+    // CHANGE CHART TYPE
+    // ============================================
+    function changeChartType() {
+      const selector = document.getElementById('chart-type-selector');
+      currentChartType = selector.value;
+      renderChart(currentChartType);
+    }
+    // ============================================
+    // LOAD UPCOMING TASKS
+    // ============================================
+    async function loadUpcomingTasks() {
+      try {
+        console.log('Loading upcoming tasks...');
+        const tasks = await taskAPI.getAll();
+        console.log('Tasks data:', tasks);
+
+        const now = new Date();
+        const nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 7);
+
+        const upcoming = tasks
+          .filter(t => {
+            const deadline = new Date(t.deadline);
+            return !t.completed && deadline >= now && deadline <= nextWeek;
+          })
+          .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+          .slice(0, 5);
+
+        const listDiv = document.getElementById('tasks-list');
+
+        if (upcoming.length === 0) {
+          listDiv.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">✅</div>
+              <div class="empty-state-message">No upcoming tasks</div>
+              <div class="empty-state-hint">You're all caught up for the next 7 days!</div>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '<table style="width: 100%;"><thead><tr><th>Task</th><th>Type</th><th>Deadline</th><th>Effort</th></tr></thead><tbody>';
+        upcoming.forEach(task => {
+          const deadline = new Date(task.deadline).toLocaleDateString();
+          const daysUntil = Math.ceil((new Date(task.deadline) - now) / (1000 * 60 * 60 * 24));
+          const urgencyClass = daysUntil <= 2 ? 'style="color: #e74c3c; font-weight: bold;"' : '';
+
+          html += `
+            <tr>
+              <td>${task.title}</td>
+              <td>${task.type}</td>
+              <td ${urgencyClass}>${deadline} (${daysUntil}d)</td>
+              <td>${task.estimatedEffort}h</td>
+            </tr>
+          `;
+        });
+        html += '</tbody></table>';
+
+        listDiv.innerHTML = html;
+      } catch (error) {
+        console.error('Tasks load error:', error);
+        document.getElementById('tasks-list').innerHTML =
+          '<p style="color: #e74c3c;">Unable to load tasks. Please try refreshing.</p>';
+      }
+    }
+
+    // ============================================
+    // LOAD UPCOMING CALENDAR EVENTS
+    // ============================================
+    async function loadUpcomingEvents() {
+      try {
+        console.log('Loading upcoming calendar events...');
+
+        const now = new Date();
+        const next30Days = new Date();
+        next30Days.setDate(next30Days.getDate() + 30);
+
+        // Use the correct API endpoint
+        const events = await calendarAPI.get(now.toISOString(), next30Days.toISOString());
+        console.log('Calendar events data:', events);
+
+        const listDiv = document.getElementById('calendar-events-list');
+
+        if (!events || events.length === 0) {
+          listDiv.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📅</div>
+          <div class="empty-state-message">No upcoming events</div>
+          <div class="empty-state-hint">Check the calendar page to view all events</div>
+        </div>
+      `;
+          return;
+        }
+
+        // Filter and sort upcoming events - FIX: Use startDate field
+        const upcomingEvents = events
+          .filter(e => {
+            const eventDate = new Date(e.startDate || e.date); // ✅ FIX: Check startDate first
+            return eventDate >= now && eventDate <= next30Days;
+          })
+          .sort((a, b) => new Date(a.startDate || a.date) - new Date(b.startDate || b.date)) // ✅ FIX
+          .slice(0, 10); // Show max 10 events
+
+        if (upcomingEvents.length === 0) {
+          listDiv.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📅</div>
+          <div class="empty-state-message">No upcoming events in next 30 days</div>
+          <div class="empty-state-hint">Total events found: ${events.length}</div>
+        </div>
+      `;
+          return;
+        }
+
+        let html = '';
+        upcomingEvents.forEach(event => {
+          const eventDate = new Date(event.startDate || event.date); // ✅ FIX: Check startDate first
+          const dateStr = eventDate.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+
+          const daysUntil = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+          const daysText = daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : `in ${daysUntil} days`;
+
+          // Event type class for styling
+          const eventTypeClass = `event-type-${(event.eventType || 'event').toLowerCase()}`;
+          const badgeClass = (event.eventType || 'event').toLowerCase();
+
+          // Event icon based on type
+          let icon = '📌';
+          if (event.eventType === 'exam') icon = '📝';
+          else if (event.eventType === 'registration') icon = '📋';
+          else if (event.eventType === 'holiday') icon = '🎉';
+          else if (event.eventType === 'event') icon = '📅';
+
+          html += `
+        <div class="event-item ${eventTypeClass}">
+          <div class="event-header">
+            <div class="event-title">
+              <span class="event-icon">${icon}</span>
+              ${event.title}
+            </div>
+            <span class="event-type-badge ${badgeClass}">${event.eventType || 'EVENT'}</span>
+          </div>
+          <div class="event-date">
+            📅 ${dateStr} • ${daysText}
+          </div>
+          ${event.description ? `<div class="event-description">${event.description}</div>` : ''}
+        </div>
+      `;
+        });
+
+        listDiv.innerHTML = html;
+      } catch (error) {
+        console.error('Calendar events load error:', error);
+        document.getElementById('calendar-events-list').innerHTML =
+          '<p style="color: #e74c3c;">Unable to load calendar events. Please try refreshing.</p>';
+      }
+    }
+
+    // ============================================
+    // LOAD RECENT GRADES
+    // ============================================
+    async function loadRecentGrades() {
+      try {
+        console.log('Loading recent grades...');
+        const grades = await gradeAPI.getAll();
+        console.log('Grades data:', grades);
+
+        const listDiv = document.getElementById('grades-list');
+
+        if (!grades || grades.length === 0) {
+          listDiv.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📝</div>
+              <div class="empty-state-message">No grades recorded</div>
+              <div class="empty-state-hint">Add your grades to track performance trends</div>
+            </div>
+          `;
+          return;
+        }
+
+        // Sort by date, most recent first
+        const recent = grades
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 5);
+
+        let html = '<table style="width: 100%;"><thead><tr><th>Subject</th><th>Type</th><th>Score</th><th>Max</th><th>Percentage</th><th>Date</th></tr></thead><tbody>';
+        recent.forEach(grade => {
+          // ✅ FIXED: Use correct field names
+          const marks = grade.marks || 0;
+          const maxMarks = grade.maxMarks || 100;
+          const examType = grade.examType || 'N/A';
+
+          const percentage = ((marks / maxMarks) * 100).toFixed(1);
+          const performanceClass = percentage >= 70 ? 'style="color: #27ae60;"' : percentage >= 50 ? 'style="color: #f39c12;"' : 'style="color: #e74c3c;"';
+          const date = new Date(grade.date).toLocaleDateString();
+
+          html += `
+            <tr>
+              <td>${grade.subject || 'N/A'}</td>
+              <td>${examType}</td>
+              <td>${marks}</td>
+              <td>${maxMarks}</td>
+              <td ${performanceClass}><strong>${percentage}%</strong></td>
+              <td>${date}</td>
+            </tr>
+          `;
+        });
+        html += '</tbody></table>';
+
+        listDiv.innerHTML = html;
+      } catch (error) {
+        console.error('Grades load error:', error);
+        document.getElementById('grades-list').innerHTML =
+          '<p style="color: #e74c3c;">Unable to load grades. Please try refreshing.</p>';
+      }
+    }
+
+    // ============================================
+    // SHOW ALERTS
+    // ============================================
+    function showAlerts(analysis) {
+      const container = document.getElementById('alerts-container');
+      container.innerHTML = ''; // Clear existing alerts
+
+      if (analysis.signals?.collision?.hasCollision) {
+        container.innerHTML += `
+          <div class="alert alert-warning">
+            <strong>⚠️ Deadline Overload Alert!</strong> 
+            You have multiple major deadlines in the coming weeks. Consider prioritizing tasks.
+          </div>
+        `;
+      }
+
+      if (analysis.signals?.volatility?.hasVolatility) {
+        container.innerHTML += `
+          <div class="alert alert-warning">
+            <strong>📈 Workload Spike Detected!</strong> 
+            Your workload increased by ${analysis.signals.volatility.spikePercentage}% 
+            compared to last week. Take breaks!
+          </div>
+        `;
+      }
+
+      if (analysis.signals?.recovery?.hasRecoveryDeficit) {
+        container.innerHTML += `
+          <div class="alert alert-danger">
+            <strong>🛑 Recovery Needed!</strong> 
+            You haven't had a rest day in ${analysis.signals.recovery.continuousWorkStreak} days.
+            Schedule some downtime!
+          </div>
+        `;
+      }
+
+      if (analysis.signals?.drift?.hasDrift) {
+        container.innerHTML += `
+          <div class="alert alert-danger">
+            <strong>📉 Performance Drift Detected!</strong> 
+            Your grades are declining despite increased effort. Consider seeking help or adjusting study methods.
+          </div>
+        `;
+      }
+    }
+
+    // ============================================
+    // LOGOUT
+    // ============================================
+    function logout() {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
+    // ============================================
+    // LOAD RECOMMENDATIONS
+    // ============================================
+    async function loadRecommendations() {
+      try {
+        console.log('Loading recommendations...');
+        const data = await burnoutAPI.getRecommendations();
+        console.log('Recommendations data:', data);
+
+        // Load ML Recommendations
+        const mlContainer = document.getElementById('ml-recommendations');
+        if (data.mlRecommendations && data.mlRecommendations.recommendations) {
+          const mlRecs = data.mlRecommendations.recommendations;
+
+          if (mlRecs.length === 0) {
+            mlContainer.innerHTML = '<p>No ML recommendations available.</p>';
+          } else {
+            let mlHtml = '';
+            mlRecs.forEach(rec => {
+              mlHtml += `
+            <div class="rec-card priority-${rec.priority}">
+              <div class="rec-title">
+                ${rec.title}
+                <span class="rec-badge ${rec.priority}">${rec.priority.toUpperCase()}</span>
+              </div>
+              <div class="rec-description">${rec.description}</div>
+              <strong>📋 Action Steps:</strong>
+              <ul class="rec-actions">
+                ${rec.actions.map(action => `<li>${action}</li>`).join('')}
+              </ul>
+            </div>
+          `;
+            });
+            mlContainer.innerHTML = mlHtml;
+          }
+        } else {
+          mlContainer.innerHTML = '<p>Unable to load ML recommendations.</p>';
+        }
+
+        // Load Groq AI Recommendations
+        const groqContainer = document.getElementById('groq-recommendations');
+        if (data.groqRecommendations && data.groqRecommendations.recommendations) {
+          const groqRecs = data.groqRecommendations.recommendations;
+
+          if (groqRecs.length === 0) {
+            groqContainer.innerHTML = '<p>No AI recommendations available.</p>';
+          } else {
+            let groqHtml = '';
+            groqRecs.forEach(rec => {
+              groqHtml += `
+            <div class="rec-card priority-${rec.priority}">
+              <div class="rec-title">
+                ${rec.title}
+                <span class="rec-badge ${rec.priority}">${rec.priority.toUpperCase()}</span>
+              </div>
+              <div class="rec-description">${rec.description}</div>
+              <strong>📋 Action Steps:</strong>
+              <ul class="rec-actions">
+                ${rec.actionSteps.map(step => `<li>${step}</li>`).join('')}
+              </ul>
+              ${rec.timeline ? `<div style="margin-top: 0.5rem;"><strong>⏰ Timeline:</strong> ${rec.timeline}</div>` : ''}
+              ${rec.vitResources ? `<div style="margin-top: 0.3rem;"><strong>🏫 VIT Resources:</strong> ${rec.vitResources}</div>` : ''}
+            </div>
+          `;
+            });
+            groqContainer.innerHTML = groqHtml;
+          }
+        } else {
+          groqContainer.innerHTML = '<p>Unable to load AI recommendations.</p>';
+        }
+
+      } catch (error) {
+        console.error('Recommendations load error:', error);
+        document.getElementById('ml-recommendations').innerHTML =
+          '<p style="color: #e74c3c;">Unable to load recommendations. Please try refreshing.</p>';
+        document.getElementById('groq-recommendations').innerHTML =
+          '<p style="color: #e74c3c;">Unable to load AI recommendations. Please try refreshing.</p>';
+      }
+    }
+
+    // ============================================
+    // INITIAL LOAD
+    // ============================================
+    console.log('Initializing dashboard...');
+    loadDashboard();
+
+    // Auto-refresh every 5 minutes
+    setInterval(() => {
+      if (!document.hidden) {
+        console.log('Auto-refresh triggered');
+        loadDashboard();
+      }
+    }, 5 * 60 * 1000);
+  </script>
+
+</body>
+
+</html>

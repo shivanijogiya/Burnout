@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proctor Dashboard</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/proctor.css">
+  <!-- <style>
+    .student-card {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-left: 4px solid #ddd;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .student-card:hover {
+      background: #f8f9fa;
+    }
+    .student-card.high {
+      border-left-color: #dc3545;
+      background: #fff5f5;
+    }
+    .student-card.medium {
+      border-left-color: #ffc107;
+      background: #fffbf0;
+    }
+    .student-card.low {
+      border-left-color: #28a745;
+    }
+    .student-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  </style> -->
+</head>
+<body>
+  <nav>
+    <h1>Proctor Dashboard</h1>
+    <div class="nav-links">
+      <a href="proctor.html">Dashboard</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 id="welcome"></h1>
+
+    <div class="card">
+      <h2>Students Overview</h2>
+      <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+        <button class="btn" onclick="filterStudents('all')">All</button>
+        <button class="btn btn-danger" onclick="filterStudents('high')">High Risk</button>
+        <button class="btn" style="background: #ffc107; color: #000;" onclick="filterStudents('medium')">Medium Risk</button>
+        <button class="btn btn-success" onclick="filterStudents('low')">Low Risk</button>
+      </div>
+      <div id="students-list">
+        <div class="loading">Loading students...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Detail Modal -->
+  <div id="student-modal" class="modal">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 id="modal-student-name"></h2>
+        <span style="cursor: pointer; font-size: 1.5rem;" onclick="closeModal()">&times;</span>
+      </div>
+      <div id="modal-content"></div>
+      
+      <div style="margin-top: 2rem;">
+        <h3>Add Intervention/Suggestion</h3>
+        <form id="intervention-form" onsubmit="addIntervention(event)">
+          <div class="form-group">
+            <label>Type</label>
+            <select id="intervention-type" required>
+              <option value="suggestion">Suggestion</option>
+              <option value="warning">Warning</option>
+              <option value="counseling">Counseling Referral</option>
+              <option value="task-reschedule">Task Reschedule</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="intervention-message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    if (!isLoggedIn() || getUser().role !== 'proctor') {
+      window.location.href = 'login.html';
+    }
+
+    const user = getUser();
+    document.getElementById('welcome').textContent = `Welcome, ${user.name}`;
+
+    let allStudents = [];
+    let currentFilter = 'all';
+    let selectedStudentId = null;
+
+    async function loadStudents() {
+      try {
+        allStudents = await proctorAPI.getStudents();
+        displayStudents();
+      } catch (error) {
+        console.error('Load students error:', error);
+      }
+    }
+
+    function filterStudents(filter) {
+      currentFilter = filter;
+      displayStudents();
+    }
+
+    function displayStudents() {
+      const container = document.getElementById('students-list');
+      
+      let students = allStudents;
+      if (currentFilter !== 'all') {
+        students = allStudents.filter(s => s.burnoutRisk === currentFilter);
+      }
+
+      if (students.length === 0) {
+        container.innerHTML = '<p>No students found</p>';
+        return;
+      }
+
+      let html = '';
+      students.forEach(student => {
+        const lastAnalyzed = student.lastAnalyzed 
+          ? new Date(student.lastAnalyzed).toLocaleString()
+          : 'Never';
+        
+        html += `
+          <div class="student-card ${student.burnoutRisk}" onclick="viewStudent('${student.id}')">
+            <div class="student-info">
+              <div>
+                <strong>${student.name}</strong> (${student.rollNumber})<br>
+                <small>${student.department} - Semester ${student.semester}</small>
+              </div>
+              <div style="text-align: right;">
+                <span class="risk-badge risk-${student.burnoutRisk}">
+                  ${student.burnoutRisk.toUpperCase()} RISK
+                </span><br>
+                <small>Score: ${student.burnoutScore}/100</small><br>
+                <small>Last analyzed: ${lastAnalyzed}</small>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    async function viewStudent(studentId) {
+      selectedStudentId = studentId;
+      
+      try {
+        const data = await proctorAPI.getStudent(studentId);
+        
+        document.getElementById('modal-student-name').textContent = data.student.name;
+        
+        let html = `
+          <div class="card">
+            <h3>Student Info</h3>
+            <p><strong>Email:</strong> ${data.student.email}</p>
+            <p><strong>Roll Number:</strong> ${data.student.rollNumber}</p>
+            <p><strong>Department:</strong> ${data.student.department}</p>
+            <p><strong>Semester:</strong> ${data.student.semester}</p>
+          </div>
+
+          <div class="card">
+            <h3>Burnout Analysis</h3>
+            <div style="text-align: center; padding: 1rem;">
+              <span class="risk-badge risk-${data.analysis.risk}" style="font-size: 1.2rem; padding: 0.75rem 1.5rem;">
+                ${data.analysis.risk.toUpperCase()} RISK
+              </span>
+              <p style="margin-top: 0.5rem;">Score: ${data.analysis.score}/100</p>
+            </div>
+        `;
+        
+        if (data.analysis.reasons.length > 0) {
+          html += '<h4>Risk Factors:</h4><ul>';
+          data.analysis.reasons.forEach(reason => {
+            html += `<li>${reason}</li>`;
+          });
+          html += '</ul>';
+        }
+        html += '</div>';
+
+        if (data.interventions.length > 0) {
+          html += '<div class="card"><h3>Recent Interventions</h3><ul>';
+          data.interventions.forEach(intervention => {
+            const date = new Date(intervention.createdAt).toLocaleString();
+            html += `
+              <li>
+                <strong>${intervention.type}</strong> - ${intervention.message}<br>
+                <small>By ${intervention.proctorId.name} on ${date}</small>
+              </li>
+            `;
+          });
+          html += '</ul></div>';
+        }
+
+        document.getElementById('modal-content').innerHTML = html;
+        document.getElementById('student-modal').classList.add('active');
+      } catch (error) {
+        console.error('View student error:', error);
+        alert('Error loading student details');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('student-modal').classList.remove('active');
+      selectedStudentId = null;
+    }
+
+    async function addIntervention(e) {
+      e.preventDefault();
+
+      const intervention = {
+        studentId: selectedStudentId,
+        type: document.getElementById('intervention-type').value,
+        message: document.getElementById('intervention-message').value
+      };
+
+      try {
+        await proctorAPI.addIntervention(intervention);
+        document.getElementById('intervention-form').reset();
+        alert('Intervention added successfully!');
+        await viewStudent(selectedStudentId); // Refresh
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+
+    function logout() {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
+
+    loadStudents();
+  </script>
+</body>
+</html>

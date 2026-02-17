@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIT Bot - Chatbot Component</title>
+  <style>
+    /* Floating Chat Button */
+    .chat-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .chat-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+    }
+
+    .chat-button-icon {
+      font-size: 28px;
+      color: white;
+    }
+
+    .chat-button.active .chat-button-icon::before {
+      content: '✕';
+    }
+
+    /* Chat Window */
+    .chat-window {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 380px;
+      height: 550px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      display: none;
+      flex-direction: column;
+      z-index: 999;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+    }
+
+    .chat-window.active {
+      display: flex;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Chat Header */
+    .chat-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-header-icon {
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .chat-header-text h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .chat-header-text p {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    /* Chat Messages */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 3px;
+    }
+
+    /* Message Bubbles */
+    .message {
+      display: flex;
+      gap: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.bot {
+      align-items: flex-start;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .message.bot .message-avatar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .message.user .message-avatar {
+      background: #3498db;
+      color: white;
+    }
+
+    .message-content {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .message.bot .message-content {
+      background: white;
+      color: #333;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .message.user .message-content {
+      background: #3498db;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-time {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+      padding: 0 16px;
+    }
+
+    /* Typing Indicator */
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      max-width: 80px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .typing-indicator.active {
+      display: flex;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: #667eea;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.7;
+      }
+      30% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+    }
+
+    /* Chat Input */
+    .chat-input {
+      padding: 16px;
+      background: white;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #dee2e6;
+      border-radius: 24px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    .chat-input input:focus {
+      border-color: #667eea;
+    }
+
+    .chat-input button {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-input button:hover:not(:disabled) {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .chat-input button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      padding: 12px 20px;
+      background: white;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+
+    .quick-action-btn {
+      padding: 6px 12px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 16px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .quick-action-btn:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 480px) {
+      .chat-window {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 120px);
+        right: 10px;
+        bottom: 90px;
+      }
+
+      .chat-button {
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+
+    /* Error Message */
+    .error-message {
+      background: #fee;
+      color: #e74c3c;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 20px;
+      font-size: 13px;
+      border-left: 4px solid #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Chat Button -->
+  <button class="chat-button" id="chatButton" onclick="toggleChat()">
+    <span class="chat-button-icon">💬</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chatWindow">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-icon">🤖</div>
+      <div class="chat-header-text">
+        <h3>VIT Bot</h3>
+        <p>How may I help you?</p>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <!-- Welcome message -->
+      <div class="message bot">
+        <div class="message-avatar">🤖</div>
+        <div>
+          <div class="message-content">
+            Hi! I'm VIT Bot, your personal academic assistant. I can help you with:
+            <br><br>
+            📚 Academic advice & study tips<br>
+            🔥 Burnout prevention & mental health<br>
+            📅 Task & deadline management<br>
+            🏫 VIT campus information<br>
+            <br>
+            What would you like to know?
+          </div>
+          <div class="message-time" id="welcomeTime"></div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="message bot">
+        <div class="message-avatar">🤖</div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions" id="quickActions">
+      <button class="quick-action-btn" onclick="sendQuickMessage('How can I reduce burnout?')">🔥 Reduce burnout</button>
+      <button class="quick-action-btn" onclick="sendQuickMessage('Study tips for exams')">📖 Study tips</button>
+      <button class="quick-action-btn" onclick="sendQuickMessage('Time management advice')">⏰ Time management</button>
+      <button class="quick-action-btn" onclick="sendQuickMessage('VIT library hours')">📚 Library info</button>
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input">
+      <input 
+        type="text" 
+        id="chatInput" 
+        placeholder="Type your message..." 
+        onkeypress="handleKeyPress(event)"
+      >
+      <button id="sendButton" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const GROQ_API_KEY = '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';
+    const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+    const MODEL = 'llama-3.3-70b-versatile'; // Latest and fastest model
+
+    // ============================================
+    // CHAT STATE
+    // ============================================
+    let chatHistory = [];
+    let isTyping = false;
+
+    // ============================================
+    // TOGGLE CHAT WINDOW
+    // ============================================
+    function toggleChat() {
+      const chatWindow = document.getElementById('chatWindow');
+      const chatButton = document.getElementById('chatButton');
+      
+      chatWindow.classList.toggle('active');
+      chatButton.classList.toggle('active');
+
+      // Focus input when opened
+      if (chatWindow.classList.contains('active')) {
+        document.getElementById('chatInput').focus();
+      }
+    }
+
+    // ============================================
+    // SEND MESSAGE
+    // ============================================
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+
+      if (!message || isTyping) return;
+
+      // Add user message to UI
+      addMessage('user', message);
+      input.value = '';
+
+      // Show typing indicator
+      showTyping(true);
+
+      try {
+        // Get student context
+        const context = getStudentContext();
+
+        // Build messages for Groq API
+        const messages = [
+          {
+            role: 'system',
+            content: `You are VIT Bot, a helpful AI assistant for VIT (Vellore Institute of Technology) students. 
+
+Your capabilities:
+- Provide academic advice and study strategies
+- Help with burnout prevention and mental wellness
+- Offer task and deadline management tips
+- Answer questions about VIT campus, facilities, and resources
+
+Student Context:
+${context}
+
+Guidelines:
+- Be friendly, supportive, and empathetic
+- Keep responses concise (2-4 short paragraphs max)
+- Use emojis occasionally to be engaging
+- If asked about specific VIT info you don't know, acknowledge limitations
+- Prioritize student wellbeing and mental health
+- Give actionable, practical advice`
+          },
+          ...chatHistory,
+          { role: 'user', content: message }
+        ];
+
+        // Call Groq API
+        const response = await fetch(GROQ_API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${GROQ_API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: MODEL,
+            messages: messages,
+            temperature: 0.7,
+            max_tokens: 500,
+            top_p: 0.9
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('API Error Response:', errorData);
+          throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        const botReply = data.choices[0].message.content;
+
+        // Update chat history
+        chatHistory.push(
+          { role: 'user', content: message },
+          { role: 'assistant', content: botReply }
+        );
+
+        // Keep only last 10 messages to manage token usage
+        if (chatHistory.length > 20) {
+          chatHistory = chatHistory.slice(-20);
+        }
+
+        // Add bot message to UI
+        showTyping(false);
+        addMessage('bot', botReply);
+
+      } catch (error) {
+        console.error('Chat error:', error);
+        showTyping(false);
+        
+        // Show error in chat
+        let errorMsg = 'Oops! Something went wrong. Please try again.';
+        
+        if (error.message.includes('401')) {
+          errorMsg = '🔐 Authentication error. Please check your API key.';
+        } else if (error.message.includes('429')) {
+          errorMsg = '⏳ Rate limit reached. Please wait a moment and try again.';
+        } else if (error.message.includes('API Error')) {
+          errorMsg = `❌ ${error.message}`;
+        }
+        
+        addMessage('bot', errorMsg, true);
+      }
+    }
+
+    // ============================================
+    // GET STUDENT CONTEXT
+    // ============================================
+    function getStudentContext() {
+      // Try to get student data from the parent page
+      let context = 'General student at VIT';
+
+      try {
+        // Check if we can access parent page data
+        if (window.parent && window.parent.getUser) {
+          const user = window.parent.getUser();
+          context = `Student Name: ${user.name}\nDepartment: ${user.department || 'N/A'}\nYear: ${user.year || 'N/A'}`;
+        }
+      } catch (e) {
+        // If running standalone or no access to parent
+        console.log('No student context available');
+      }
+
+      return context;
+    }
+
+    // ============================================
+    // ADD MESSAGE TO UI
+    // ============================================
+    function addMessage(sender, text, isError = false) {
+      const messagesDiv = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+
+      const time = new Date().toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit' 
+      });
+
+      const avatar = sender === 'bot' ? '🤖' : '👤';
+      
+      messageDiv.innerHTML = `
+        <div class="message-avatar">${avatar}</div>
+        <div>
+          <div class="message-content ${isError ? 'error' : ''}" style="${isError ? 'background: #fee; color: #e74c3c;' : ''}">
+            ${text.replace(/\n/g, '<br>')}
+          </div>
+          <div class="message-time">${time}</div>
+        </div>
+      `;
+
+      // Insert before typing indicator
+      const typingMsg = messagesDiv.querySelector('.message.bot:last-child');
+      messagesDiv.insertBefore(messageDiv, typingMsg);
+
+      // Scroll to bottom
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // ============================================
+    // SHOW/HIDE TYPING INDICATOR
+    // ============================================
+    function showTyping(show) {
+      isTyping = show;
+      const indicator = document.getElementById('typingIndicator');
+      const sendButton = document.getElementById('sendButton');
+      
+      indicator.classList.toggle('active', show);
+      sendButton.disabled = show;
+
+      // Scroll to bottom when typing starts
+      if (show) {
+        const messagesDiv = document.getElementById('chatMessages');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+    }
+
+    // ============================================
+    // QUICK MESSAGE
+    // ============================================
+    function sendQuickMessage(message) {
+      document.getElementById('chatInput').value = message;
+      sendMessage();
+    }
+
+    // ============================================
+    // HANDLE ENTER KEY
+    // ============================================
+    function handleKeyPress(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
+    // ============================================
+    // INITIALIZE
+    // ============================================
+    window.addEventListener('load', () => {
+      // Set welcome message time
+      const welcomeTime = document.getElementById('welcomeTime');
+      const now = new Date().toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit' 
+      });
+      welcomeTime.textContent = now;
+
+      console.log('✅ VIT Bot initialized and ready!');
+      console.log('📡 Using model:', MODEL);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grades - Burnout Prediction System-Bond Beyond</title>
+  <link rel="stylesheet" href="../css/grade.css">
+  <!-- <style>
+    .upload-section {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      border: 2px dashed #27ae60;
+    }
+    
+    .upload-area {
+      text-align: center;
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .upload-area:hover {
+      background: #e8f8f0;
+    }
+    
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .preview-table {
+      margin-top: 2rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .btn-success {
+      background: #27ae60;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 1rem;
+    }
+    
+    .btn-cancel {
+      background: #95a5a6;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    #file-input {
+      display: none;
+    }
+    
+    .processing {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #27ae60;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .template-info {
+      background: #fff3cd;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+  </style> -->
+</head>
+<body>
+  <nav>
+    <h1>Burnout Prediction System-Bond Beyond</h1>
+    <div class="nav-links">
+      <a href="student.html">Dashboard</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="grades.html">Grades</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Excel Upload Section -->
+    <div class="card">
+      <h2>📊 Upload Grade Sheet (Excel/CSV)</h2>
+      <div class="upload-section">
+        <div class="upload-area" onclick="document.getElementById('file-input').click()">
+          <div class="upload-icon">📁</div>
+          <h3>Click to upload Excel/CSV or drag and drop</h3>
+          <p style="color: #7f8c8d;">Supports .xlsx, .xls, .csv files</p>
+        </div>
+        <input type="file" id="file-input" accept=".xlsx,.xls,.csv" onchange="handleFileSelect(event)">
+        
+        <div class="template-info">
+          <strong>📋 Excel Template Format:</strong><br>
+          Required columns: <code>Subject</code>, <code>ExamType</code>, <code>Marks</code>, <code>MaxMarks</code><br>
+          Example: <code>Computer Programming | assignment | 85 | 100</code>
+        </div>
+        
+        <div id="processing" class="processing">
+          <div class="spinner"></div>
+          <p>Processing file... Please wait</p>
+        </div>
+        
+        <div id="preview-section" style="display: none;">
+          <h3>📋 Extracted Grades (Review before saving)</h3>
+          <div id="preview-container" class="preview-table"></div>
+          <div style="margin-top: 1rem;">
+            <button class="btn-success" onclick="saveExtractedGrades()">✓ Save All Grades</button>
+            <button class="btn-cancel" onclick="cancelUpload()">✗ Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual Entry Form -->
+    <div class="card">
+      <h2>✍️ Add Grade Manually</h2>
+      <form id="grade-form" onsubmit="addGrade(event)">
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" id="subject" required>
+        </div>
+        <div class="form-group">
+          <label>Exam Type</label>
+          <select id="exam-type" required>
+            <option value="cat1">Cat 1</option>
+            <option value="cat2">Cat 2</option>
+            <option value="mid-term">Mid Term</option>
+            <option value="final">Final Exam</option>
+            <option value="quiz">Quiz</option>
+            <option value="assignment">Assignment</option>
+            <option value="course-project">Course Project</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Marks Obtained</label>
+          <input type="number" id="marks" min="0" step="0.1" required>
+        </div>
+        <div class="form-group">
+          <label>Maximum Marks</label>
+          <input type="number" id="max-marks" min="1" step="0.1" required>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="date" required>
+        </div>
+        <div class="form-group">
+          <label>Semester</label>
+          <input type="number" id="semester" min="1" max="8">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Grade</button>
+      </form>
+    </div>
+
+    <!-- My Grades -->
+    <div class="card">
+      <h2>My Grades</h2>
+      <div id="grades-container">
+        <div class="loading">Loading grades...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    if (!isLoggedIn() || getUser().role !== 'student') {
+      window.location.href = 'login.html';
+    }
+
+    let extractedGrades = [];
+
+    // ============================================
+    // HANDLE FILE SELECT
+    // ============================================
+    async function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const validTypes = [
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+        'application/vnd.ms-excel', // .xls
+        'text/csv' // .csv
+      ];
+
+      if (!validTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
+        alert('Please upload an Excel (.xlsx, .xls) or CSV file');
+        return;
+      }
+
+      document.getElementById('processing').style.display = 'block';
+      document.getElementById('preview-section').style.display = 'none';
+
+      try {
+        const result = await gradeAPI.uploadExcel(file);
+        extractedGrades = result.grades;
+        
+        displayPreview(extractedGrades);
+        document.getElementById('processing').style.display = 'none';
+        document.getElementById('preview-section').style.display = 'block';
+      } catch (error) {
+        document.getElementById('processing').style.display = 'none';
+        alert('Error processing file: ' + error.message + '\nPlease check your file format and try again.');
+      }
+    }
+
+    // ============================================
+    // DISPLAY PREVIEW
+    // ============================================
+    function displayPreview(grades) {
+      const container = document.getElementById('preview-container');
+      
+      if (grades.length === 0) {
+        container.innerHTML = '<p style="color: #e74c3c;">No grades found in file. Please check your file format.</p>';
+        return;
+      }
+
+      let html = '<table><thead><tr><th>Subject</th><th>Type</th><th>Marks</th><th>Max Marks</th><th>Percentage</th></tr></thead><tbody>';
+      
+      grades.forEach(grade => {
+        const percentage = ((grade.marks / grade.maxMarks) * 100).toFixed(2);
+        html += `
+          <tr>
+            <td>${grade.subject}</td>
+            <td>${grade.examType}</td>
+            <td>${grade.marks}</td>
+            <td>${grade.maxMarks}</td>
+            <td>${percentage}%</td>
+          </tr>
+        `;
+      });
+      html += '</tbody></table>';
+      
+      container.innerHTML = html;
+    }
+
+    // ============================================
+    // SAVE EXTRACTED GRADES
+    // ============================================
+    async function saveExtractedGrades() {
+      if (extractedGrades.length === 0) {
+        alert('No grades to save');
+        return;
+      }
+
+      try {
+        await gradeAPI.bulkCreate(extractedGrades);
+        alert(`Successfully added ${extractedGrades.length} grades!`);
+        cancelUpload();
+        await loadGrades();
+      } catch (error) {
+        alert('Error saving grades: ' + error.message);
+      }
+    }
+
+    // ============================================
+    // CANCEL UPLOAD
+    // ============================================
+    function cancelUpload() {
+      document.getElementById('file-input').value = '';
+      document.getElementById('preview-section').style.display = 'none';
+      extractedGrades = [];
+    }
+
+    // ============================================
+    // LOAD GRADES
+    // ============================================
+    async function loadGrades() {
+      try {
+        const grades = await gradeAPI.getAll();
+        const container = document.getElementById('grades-container');
+        
+        if (grades.length === 0) {
+          container.innerHTML = '<p>No grades found</p>';
+          return;
+        }
+
+        let html = '<table>';
+        html += '<tr><th>Subject</th><th>Type</th><th>Marks</th><th>Percentage</th><th>Date</th><th>Semester</th></tr>';
+        
+        grades.forEach(grade => {
+          const date = new Date(grade.date).toLocaleDateString();
+          const examType = grade.examType || 'N/A';
+          const marks = grade.marks !== undefined ? grade.marks : 'N/A';
+          const maxMarks = grade.maxMarks !== undefined ? grade.maxMarks : 'N/A';
+          const percentage = grade.percentage !== undefined 
+            ? grade.percentage.toFixed(2) + '%' 
+            : 'N/A';
+          
+          html += `
+            <tr>
+              <td>${grade.subject || 'N/A'}</td>
+              <td>${examType}</td>
+              <td>${marks}/${maxMarks}</td>
+              <td>${percentage}</td>
+              <td>${date}</td>
+              <td>${grade.semester || '-'}</td>
+            </tr>
+          `;
+        });
+        html += '</table>';
+
+        container.innerHTML = html;
+      } catch (error) {
+        console.error('Load grades error:', error);
+      }
+    }
+
+    // ============================================
+    // ADD GRADE MANUALLY
+    // ============================================
+    async function addGrade(e) {
+      e.preventDefault();
+
+      const grade = {
+        subject: document.getElementById('subject').value,
+        examType: document.getElementById('exam-type').value,
+        marks: parseFloat(document.getElementById('marks').value),
+        maxMarks: parseFloat(document.getElementById('max-marks').value),
+        date: document.getElementById('date').value,
+        semester: parseInt(document.getElementById('semester').value) || undefined
+      };
+
+      try {
+        await gradeAPI.create(grade);
+        document.getElementById('grade-form').reset();
+        await loadGrades();
+        alert('Grade added successfully!');
+      } catch (error) {
+        alert('Error adding grade: ' + error.message);
+      }
+    }
+
+    function logout() {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
+
+    loadGrades();
+  </script>
+</body>
+</html>

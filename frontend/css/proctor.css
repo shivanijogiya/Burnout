@@ -1,0 +1,224 @@
+/* ============================================
+   🎓 PROCTOR DASHBOARD – CREAM PREMIUM THEME
+   ============================================ */
+
+/* ---------- PAGE BASE ---------- */
+body {
+  background: linear-gradient(135deg, #f6efe3, #efe4d2);
+}
+
+/* ---------- STUDENT LIST CARD ---------- */
+.student-card {
+  background: #fbf6ec;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  border-left: 6px solid transparent;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.student-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 22px 45px rgba(0,0,0,0.14);
+  background: #fffaf3;
+}
+
+/* ---------- RISK STATES ---------- */
+.student-card.high {
+  border-left-color: #c0392b;
+  background: linear-gradient(to right, #fdecea, #fbf6ec);
+}
+
+.student-card.medium {
+  border-left-color: #d4a017;
+  background: linear-gradient(to right, #fff6da, #fbf6ec);
+}
+
+.student-card.low {
+  border-left-color: #2e7d32;
+  background: linear-gradient(to right, #e7f6ea, #fbf6ec);
+}
+
+/* ---------- STUDENT INFO ---------- */
+.student-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.student-info strong {
+  font-size: 1.05rem;
+  color: #3e2c1c;
+}
+
+.student-info small {
+  color: #7a6652;
+}
+
+/* ---------- FILTER BUTTONS ---------- */
+button.btn {
+  background: #ede0ca;
+  color: #4a3828;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+button.btn:hover {
+  background: #d8c4a8;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: #c0392b !important;
+  color: #fff !important;
+}
+
+.btn-success {
+  background: #2e7d32 !important;
+  color: #fff !important;
+}
+
+/* ---------- MODAL BACKDROP ---------- */
+.modal {
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+}
+
+/* ---------- MODAL CONTENT ---------- */
+.modal-content {
+  background: #fffaf3;
+  border-radius: 22px;
+  padding: 2.5rem;
+  max-width: 850px;
+  width: 92%;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.25);
+  animation: modalScale 0.45s ease;
+}
+
+@keyframes modalScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- MODAL HEAD ---------- */
+#modal-student-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #3e2c1c;
+}
+
+.modal-content span {
+  font-size: 2rem;
+  color: #8b6f47;
+  transition: transform 0.2s ease;
+}
+
+.modal-content span:hover {
+  transform: rotate(90deg);
+}
+
+/* ---------- MODAL CARDS ---------- */
+.modal-content .card {
+  background: #fbf6ec;
+  border-radius: 18px;
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: inset 0 0 0 1px #eadfcd;
+}
+
+.modal-content h3 {
+  color: #4a3828;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------- INTERVENTION FORM ---------- */
+#intervention-form {
+  background: #fbf6ec;
+  padding: 1.75rem;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 1px #eadfcd;
+}
+
+#intervention-form label {
+  font-weight: 700;
+  color: #5a4633;
+  margin-bottom: 0.4rem;
+}
+
+#intervention-form select,
+#intervention-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #e5d7c2;
+  background: #fffdf9;
+  transition: all 0.3s ease;
+}
+
+#intervention-form textarea {
+  min-height: 110px;
+}
+
+#intervention-form select:focus,
+#intervention-form textarea:focus {
+  border-color: #b0895a;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(176,137,90,0.2);
+}
+
+/* ---------- SUBMIT BUTTON ---------- */
+#intervention-form button {
+  background: linear-gradient(135deg, #b0895a, #8b6f47);
+  color: white;
+  border-radius: 999px;
+  padding: 0.75rem 2rem;
+  font-weight: 800;
+  box-shadow: 0 10px 25px rgba(139,111,71,0.4);
+}
+
+#intervention-form button:hover {
+  transform: translateY(-3px) scale(1.05);
+}
+
+/* ---------- LISTS INSIDE MODAL ---------- */
+.modal-content ul {
+  padding-left: 1.5rem;
+}
+
+.modal-content li {
+  margin-bottom: 0.5rem;
+  color: #5a4633;
+}
+
+/* ---------- LOADING ---------- */
+.loading {
+  text-align: center;
+  color: #8b6f47;
+  font-weight: 700;
+  padding: 1.5rem;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .student-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .modal-content {
+    padding: 1.75rem;
+  }
+}
