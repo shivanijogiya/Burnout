@@ -177,7 +177,7 @@ predictBurnout(studentId) {
 
 ---
 
-## 📊 Data Flow Analysis
+##  Data Flow Analysis
 
 ### **Current Flow (INCOMPLETE)**
 
@@ -282,7 +282,7 @@ await loadRecentGrades();
 
 ---
 
-## 💡 Solution Architecture
+## Solution Architecture
 
 ### **Phase 1: Backend Fixes**
 
@@ -577,4 +577,5 @@ Authorization: Bearer {token}
 
 
 Ready for the detailed fix implementation! 💪
+
 
