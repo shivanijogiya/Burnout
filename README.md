@@ -1,6 +1,6 @@
 # Academic Burnout Prediction System - Complete Project Analysis
 
-## 📋 Table of Contents
+## Table of Contents
 1. [Project Structure](#project-structure)
 2. [How Your System Works](#how-your-system-works)
 3. [Data Flow Analysis](#data-flow-analysis)
@@ -66,7 +66,7 @@ burnout-system/
 
 ---
 
-## 🔄 How Your System Works
+## How Your System Works
 
 ### **1. Data Collection**
 
@@ -112,7 +112,7 @@ calculateWorkloadScores(studentId, startDate, endDate) {
 }
 ```
 
-**📊 Weights:**
+** Weights:**
 - Exam: 3x
 - Project: 2.5x
 - Assignment: 1.5x
@@ -577,3 +577,4 @@ Authorization: Bearer {token}
 
 
 Ready for the detailed fix implementation! 💪
+
