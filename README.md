@@ -151,7 +151,7 @@ predictBurnout(studentId) {
 - Checks if:
   - ≥3 major tasks (exam/project) in one week, OR
   - Total hours >50 in one week
-- **🚨 PROBLEM:** Only checks TASKS, not EVENTS
+- ** PROBLEM:** Only checks TASKS, not EVENTS
 
 #### **Volatility Detector** (`/services/volatility.js`)
 - Gets last 4 weeks workload
@@ -573,6 +573,7 @@ Authorization: Bearer {token}
 
 
 Ready for the detailed fix implementation! 💪
+
 
 
 
