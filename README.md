@@ -157,7 +157,7 @@ predictBurnout(studentId) {
 - Gets last 4 weeks workload
 - Compares current week vs previous week
 - Flags if increase ≥50%
-- **🚨 PROBLEM:** Workload only from TASKS
+- ** PROBLEM:** Workload only from TASKS
 
 #### **Recovery Detector** (`/services/recovery.js`)
 - Gets last 30 days workload
@@ -573,6 +573,7 @@ Authorization: Bearer {token}
 
 
 Ready for the detailed fix implementation! 💪
+
 
 
 
