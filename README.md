@@ -163,7 +163,7 @@ predictBurnout(studentId) {
 - Gets last 30 days workload
 - Finds continuous high-load days (score >10)
 - Flags if ≥7 days without rest
-- **🚨 PROBLEM:** Workload only from TASKS
+- ** PROBLEM:** Workload only from TASKS
 
 #### **Drift Detector** (`/services/drift.js`)
 - Gets 6 months of grades and workload
