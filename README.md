@@ -169,7 +169,7 @@ predictBurnout(studentId) {
 - Gets 6 months of grades and workload
 - Checks if effort increasing but grades declining
 - Flags sustained drift (≥3 months)
-- **🚨 PROBLEM:** Workload only from TASKS
+- ** PROBLEM:** Workload only from TASKS
 
 ---
 
