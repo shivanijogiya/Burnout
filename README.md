@@ -217,7 +217,7 @@ student.html doesn't show them ❌
 
 ---
 
-## 🚨 The Problem Identified
+##  The Problem Identified
 
 ### **Issue #1: Calendar Events NOT in Workload Calculation**
 
