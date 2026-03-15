@@ -206,7 +206,7 @@ Saved to MongoDB
     ↓
 /calendar/all route returns events
     ↓
-calendar.html displays them ✅
+calendar.html displays them 
     ↓
 BUT... they are NEVER read by workload calculation ❌
     ↓
