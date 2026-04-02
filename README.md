@@ -319,7 +319,7 @@ holiday: 0    // Rest day
 #### **2.1 Update API Client**
 **File:** `/frontend/js/api.js`
 
-**Status:** ✅ Already correct
+**Status:** Already correct
 ```javascript
 calendarAPI.get(startDate, endDate) {
   return apiCall(`/calendar/all?startDate=${...}&endDate=${...}`);
