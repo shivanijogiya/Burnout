@@ -1,6 +1,6 @@
 # Academic Burnout Prediction System - Complete Project Analysis
 
-## Table of Contents
+## Table of Contents:
 1. [Project Structure](#project-structure)
 2. [How Your System Works](#how-your-system-works)
 3. [Data Flow Analysis](#data-flow-analysis)
