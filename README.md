@@ -10,7 +10,7 @@
 
 ---
 
-##  Project Structure
+##  Project Structure :
 
 ```
 burnout-system/
