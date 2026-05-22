@@ -1,4 +1,4 @@
-# Academic Burnout Prediction System - Complete Analysis
+# Academic Burnout Prediction System - Complete AI Analysis
 
 ## Table of Contents:
 1. [Project Structure](#project-structure)
