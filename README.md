@@ -1,4 +1,4 @@
-# Academic Burnout Prediction System - Complete AI Analysis
+# Academic Burnout Prediction System - Complete AI Analysis (Hackathon project)
 
 ## Table of Contents:
 1. [Project Structure](#project-structure)
