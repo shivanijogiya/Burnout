@@ -360,7 +360,7 @@ calendarAPI.get(startDate, endDate) {
 
 ---
 
-## 🎯 Implementation Priority
+##  Implementation Priority
 
 ### **HIGH PRIORITY (Fix Now)**
 1. ✅ Update `/services/workload.js` - Include events in calculation
