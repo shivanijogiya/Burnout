@@ -425,7 +425,7 @@ Week of Feb 8-14:
 - Upcoming Events: MISSING ❌
 ```
 
-#### **DESIRED BEHAVIOR ✅**
+#### **DESIRED BEHAVIOR **
 
 **Workload Calculation:**
 ```
