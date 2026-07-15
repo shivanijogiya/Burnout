@@ -249,7 +249,7 @@ const tasks = await Task.find({
   studentId,
   deadline: { $gte: today, $lte: twoWeeksLater }
 });
-// ❌ Doesn't count Student Tour, Welfare Visit, etc.
+//  Doesn't count Student Tour, Welfare Visit, etc.
 ```
 
 **Impact:**
@@ -268,7 +268,7 @@ await loadWorkloadChart();
 await loadUpcomingTasks();
 await loadRecentGrades();
 
-// ❌ No function to load calendar events
+//  No function to load calendar events
 ```
 
 **Impact:**
