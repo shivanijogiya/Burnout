@@ -212,7 +212,7 @@ BUT... they are NEVER read by workload calculation
     ↓
 burnout prediction ignores them 
     ↓
-student.html doesn't show them ❌
+student.html doesn't show them 
 ```
 
 ---
