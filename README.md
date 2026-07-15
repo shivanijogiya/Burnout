@@ -208,9 +208,9 @@ Saved to MongoDB
     ↓
 calendar.html displays them 
     ↓
-BUT... they are NEVER read by workload calculation ❌
+BUT... they are NEVER read by workload calculation 
     ↓
-burnout prediction ignores them ❌
+burnout prediction ignores them 
     ↓
 student.html doesn't show them ❌
 ```
